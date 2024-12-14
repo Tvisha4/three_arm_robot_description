@@ -1,0 +1,161 @@
+<?xml version="1.0" ?>
+<robot name="three_arm_robot">
+  <!-- World Link -->
+  <link name="world"/>
+
+  <!-- Base Link -->
+  <link name="base_link">
+    <inertial>
+      <origin xyz="0 0 0.01" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.01" ixy="0.0" ixz="0.0" iyy="0.01" iyz="0.0" izz="0.01"/>
+    </inertial>
+    <visual>
+      <origin xyz="0 0 0.01" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.2" radius="0.1"/>
+      </geometry>
+      <material name="black">
+        <color rgba="0 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <origin xyz="0 0 0.01" rpy="0 0 0"/>
+      <geometry>
+        <cylinder length="0.2" radius="0.1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Fixed Joint to World -->
+  <joint name="base_to_world" type="fixed">
+    <parent link="world"/>
+    <child link="base_link"/>
+    <origin xyz="0 0 0"/>
+  </joint>
+
+  <!-- Joint 1 -->
+  <joint name="joint1" type="revolute">
+    <parent link="base_link"/>
+    <child link="link1"/>
+    <origin rpy="0 0 0" xyz="0 0 0.1"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="80.0" lower="-3.142" upper="3.142" velocity="3.142"/>
+  </joint>
+
+  <!-- Link 1 -->
+  <link name="link1">
+    <inertial>
+      <origin xyz="0.5 0 0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <box size="1.0 0.1 0.1"/>
+      </geometry>
+      <material name="blue">
+        <color rgba="0 0 1 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="1.0 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Joint 2 -->
+  <joint name="joint2" type="revolute">
+    <parent link="link1"/>
+    <child link="link2"/>
+    <origin rpy="0 0 0" xyz="1.0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="80.0" lower="-3.142" upper="3.142" velocity="3.142"/>
+  </joint>
+
+  <!-- Link 2 -->
+  <link name="link2">
+    <inertial>
+      <origin xyz="0.5 0 0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <box size="1.0 0.1 0.1"/>
+      </geometry>
+      <material name="green">
+        <color rgba="0 1 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="1.0 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- Joint 3 -->
+  <joint name="joint3" type="revolute">
+    <parent link="link2"/>
+    <child link="link3"/>
+    <origin rpy="0 0 0" xyz="1.0 0 0"/>
+    <axis xyz="0 0 1"/>
+    <limit effort="80.0" lower="-3.142" upper="3.142" velocity="3.142"/>
+  </joint>
+
+  <!-- Link 3 -->
+  <link name="link3">
+    <inertial>
+      <origin xyz="0.5 0 0" rpy="0 0 0"/>
+      <mass value="1.0"/>
+      <inertia ixx="0.01" ixy="0" ixz="0" iyy="0.01" iyz="0" izz="0.01"/>
+    </inertial>
+    <visual>
+      <geometry>
+        <box size="1.0 0.1 0.1"/>
+      </geometry>
+      <material name="red">
+        <color rgba="1 0 0 1"/>
+      </material>
+    </visual>
+    <collision>
+      <geometry>
+        <box size="1.0 0.1 0.1"/>
+      </geometry>
+    </collision>
+  </link>
+
+  <!-- ROS2 Control -->
+  <ros2_control name="GazeboSystem" type="system">
+    <hardware>
+      <plugin>gazebo_ros2_control/GazeboSystem</plugin>
+    </hardware>
+    <joint name="joint1">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="joint2">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+    <joint name="joint3">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+      <state_interface name="effort"/>
+    </joint>
+  </ros2_control>
+
+  <!-- Gazebo Plugin -->
+  <gazebo>
+    <plugin filename="libgazebo_ros2_control.so" name="gazebo_ros2_control">
+      <parameters>/home/abhinand/Documents/3arm_robotic_manipulator/DC/config/robot_config.yaml</parameters>
+    </plugin>
+  </gazebo>
+</robot>
