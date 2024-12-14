@@ -1,0 +1,1 @@
+# three_arm_robot_description
